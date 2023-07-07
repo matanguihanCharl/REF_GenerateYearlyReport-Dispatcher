@@ -1,5 +1,5 @@
 {
-  "name": "REF_GenerateYearlyReport",
+  "name": "REF_GenerateYearlyReport_Dispatcher",
   "projectId": "a068f05c-456a-4025-ab94-be19ff870779",
   "description": "A bot which gets the Work Items from ACME website send to orchestrator as queues and process the data using performer workflow.",
   "main": "REF_Dispatcher(Main).xaml",
