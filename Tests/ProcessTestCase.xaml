@@ -100,7 +100,7 @@
   <Sequence sap2010:Annotation.AnnotationText="Verify if the Process workflow works as expected.&#xA;The verification should check whether the output of the Process workflow is the expected one." DisplayName="ProcessTestCase" sap:VirtualizedContainerService.HintSize="610,2373" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="Config" />
-      <Variable x:TypeArguments="ui:QueueItem" Name="TransactionItem" />
+      <Variable x:TypeArguments="sd:DataRow" Name="TransactionItem" />
       <Variable x:TypeArguments="x:Int32" Default="1" Name="TransactionNumber" />
       <Variable x:TypeArguments="sd:DataTable" Name="outDT" />
     </Sequence.Variables>
@@ -139,11 +139,15 @@
       </Assign>
       <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke GetTransactionData workflow" sap:VirtualizedContainerService.HintSize="434,113" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" LogEntry="No" LogExit="No" UnSafe="False" WorkflowFileName="Framework\GetTransactionData.xaml">
         <ui:InvokeWorkflowFile.Arguments>
-          <InArgument x:TypeArguments="x:Int32" x:Key="in_TransactionNumber" />
+          <InArgument x:TypeArguments="x:Int32" x:Key="in_TransactionNumber">
+            <VisualBasicValue x:TypeArguments="x:Int32" ExpressionText="TransactionNumber" />
+          </InArgument>
           <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
             <VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="Config" />
           </InArgument>
-          <OutArgument x:TypeArguments="sd:DataRow" x:Key="out_TransactionItem" />
+          <OutArgument x:TypeArguments="sd:DataRow" x:Key="out_TransactionItem">
+            <VisualBasicReference x:TypeArguments="sd:DataRow" ExpressionText="TransactionItem" />
+          </OutArgument>
           <OutArgument x:TypeArguments="x:String" x:Key="out_TransactionField1" />
           <OutArgument x:TypeArguments="x:String" x:Key="out_TransactionField2" />
           <OutArgument x:TypeArguments="x:String" x:Key="out_TransactionID" />

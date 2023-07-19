@@ -3,11 +3,12 @@
     <x:Property Name="in_Type" Type="InArgument(x:String)" />
     <x:Property Name="in_DataTable" Type="InArgument(sd:DataTable)" />
     <x:Property Name="in_Status" Type="InArgument(x:String)" />
+    <x:Property Name="in_Index" Type="InArgument(x:Int32)" />
   </x:Members>
   <VisualBasic.Settings>
     <x:Null />
   </VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>1048,825</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>1048,821</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>System1_FilterWIDataTable_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
@@ -90,39 +91,42 @@
       <AssemblyReference>System.Memory</AssemblyReference>
       <AssemblyReference>System.Private.Uri</AssemblyReference>
       <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Linq.Parallel</AssemblyReference>
+      <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+      <AssemblyReference>System.Linq.Queryable</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="System1_FilterWIDataTable" sap:VirtualizedContainerService.HintSize="472,760" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="System1_FilterWIDataTable" sap:VirtualizedContainerService.HintSize="472,756" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[in_DataTable]" DisplayName="For Each Row in Data Table - Sent to Orchestrator" sap:VirtualizedContainerService.HintSize="410,468" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
-      <ui:ForEachRow.Body>
-        <ActivityAction x:TypeArguments="sd:DataRow">
-          <ActivityAction.Argument>
-            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="CurrentRow" />
-          </ActivityAction.Argument>
-          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="376,282" sap2010:WorkflowViewState.IdRef="Sequence_3">
-            <sap:WorkflowViewStateService.ViewState>
-              <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-              </scg:Dictionary>
-            </sap:WorkflowViewStateService.ViewState>
-            <ui:AddQueueItem ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Add Queue Item" FolderPath="REF_YearlyReport" sap:VirtualizedContainerService.HintSize="334,194" sap2010:WorkflowViewState.IdRef="AddQueueItem_2" Priority="Normal" QueueType="REF_YearlyReportQueues" Reference="[CurrentRow(2).ToString]">
-              <ui:AddQueueItem.ItemInformation>
-                <InArgument x:TypeArguments="x:String" x:Key="&quot;WIID&quot;">[CurrentRow(2).ToString]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="&quot;Description&quot;">[CurrentRow(3).ToString]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="&quot;Type&quot;">[CurrentRow(4).ToString]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="&quot;Status&quot;">[CurrentRow(5).ToString]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="&quot;Date&quot;">[CurrentRow(6).ToString]</InArgument>
-              </ui:AddQueueItem.ItemInformation>
-            </ui:AddQueueItem>
-          </Sequence>
-        </ActivityAction>
-      </ui:ForEachRow.Body>
-    </ui:ForEachRow>
+    <If Condition="[string.IsNullOrEmpty(in_DataTable(in_Index)(2).toString) = false]" DisplayName="Check if DataRow still has data" sap:VirtualizedContainerService.HintSize="410,464" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Then>
+        <Sequence sap:VirtualizedContainerService.HintSize="376,282" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:AddQueueItem ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Add Queue Item" FolderPath="REF_YearlyReport" sap:VirtualizedContainerService.HintSize="334,194" sap2010:WorkflowViewState.IdRef="AddQueueItem_2" Priority="Normal" QueueType="REF_YearlyReportQueues" Reference="[&quot;#: &quot;+ in_Index.ToString +&quot; || &quot; +in_DataTable(in_Index)(2).toString]">
+            <ui:AddQueueItem.ItemInformation>
+              <InArgument x:TypeArguments="x:String" x:Key="WIID">[in_DataTable(in_Index)(2).toString]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Description">[in_DataTable(in_Index)(3).toString]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Type">[in_DataTable(in_Index)(4).toString]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Status">[in_DataTable(in_Index)(5).toString]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Date">[in_DataTable(in_Index)(6).toString]</InArgument>
+            </ui:AddQueueItem.ItemInformation>
+          </ui:AddQueueItem>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3" />
+      </If.Else>
+    </If>
     <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="410,141" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="[UiPath.Core.Activities.LogLevel.Info]" Message="[&quot;Data Filtered and Sent to Orchestrator...&quot;]" />
   </Sequence>
 </Activity>
